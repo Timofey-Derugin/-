@@ -1,0 +1,122 @@
+import java.util.*;
+import java.lang.*;
+
+public class new_java_project {
+
+    public static void BubbleSort(int num, int[] list){
+        /* сортировка пузырьком*/
+        /* Относительно медленная, сложность - O(n^2)*/
+        /* Проходим н раз по массиву[:(сколько раз уже прошлись)] и меняем элементы, если они неправльно расположены*/
+        for (int i = 0; i < num - 1; i++){
+            for (int j = 0; j < num - i - 1; j++){
+                if (list[j + 1] < list[j]) {
+                    int temp = list[j];
+                    list[j] = list[j + 1];
+                    list[j + 1] = temp;
+                }
+            }
+        }
+        System.out.println("Пузырьковая сортировка вывела:");
+        System.out.println(Arrays.toString(list));
+    }
+
+    public static void InsertionSort(int num, int[] list) {
+        /* Сортировка вставками*/
+        /*Также медленная, сложность - O(n^2)*/
+        /*Каждый элемент вставляем туда, куда надо*/
+        for (int i = 0; i < num; i++){
+            int temp = list[i];
+            int j;
+            for (j = i - 1; j >= 0; j--){
+                if (temp < list[i]) list[i + 1] = list[i];
+                else break;
+            }
+            list[j + 1] = temp;
+        }
+        System.out.println("Сортировка вставками вывела:");
+        System.out.println(Arrays.toString(list));
+    }
+
+    public static void SelectionSort(int num, int[] list){
+        /* Cортировка выбором*/
+        /* Тоже медленная - O(n^2)*/
+        /* Находим минимальный элемент, сдвигаем в начало массива*/
+        for (int i = 0; i < num; i++){
+            int temp = i;
+            for (int j = i; j < num; j++){
+                if (list[temp] > list[j]) temp = j;
+            }
+            int x = list[temp];
+            list[temp] = list[i];
+            list[i] = x;
+        }
+        System.out.println("Сортировка выбором вывела:");
+        System.out.println(Arrays.toString(list));
+    }
+
+    public static void QuickSort(int[] list, int beg, int end){
+        /* Быстрая ортировка*/
+        /* Быстрая, сложность - O(n*log(n)*/
+        /* Выбираем опорный элемент и делим на массивы, в которых значения больше и меньше него. Сортируем эти массивы рекурсией*/
+        if (beg >= end)
+            return;
+        int mid = (beg + end) / 2;
+        int s = list[mid];
+        int i = beg;
+        int j = end;
+        while (i <= j) {
+            while (list[i] < s) i++;
+            while (list[j] > s) j--;
+            if (i <= j){
+                int temp = list[i];
+                list[i] = list[j];
+                list[j] = temp;
+                i ++;
+                j --;
+            }
+        }
+        if (beg < j) QuickSort(list, beg, j);
+        if (end > i) QuickSort(list, i, end);
+
+    }
+
+    public static void MergeSort(int[] list, int beg, int end) {
+        /* Сортировка слиянием*/
+        /* Быстрая, сложность - O(n*log(n))*/
+        /* Просто делим массив в середине на два подмассива, сортируя их рекурсией*/
+        if (end - beg > 1){
+            int mid = (end + beg) / 2;
+            MergeSort(list, beg, mid);
+            MergeSort(list, mid, end);
+
+            int[] temp = new int[end - beg];
+            int i = beg, j = mid;
+            for (int k = 0; k < (end - beg); k++){
+                if (j >= end || i < mid && list[i] < list[j]) temp[k] = list[i++];
+                else temp[k] = list[j++];
+            }
+
+            System.arraycopy(temp,0, list, beg, end - beg);
+        }
+    }
+
+    public static void main(String[] args) {
+    Scanner sc = new Scanner(System.in);
+    System.out.println("Введите количество элементов в массиве:");
+    int n = sc.nextInt();
+    int[] l = new int[n];
+    System.out.println("Введите массив:");
+    for (int i = 0; i < n; i++){
+        l[i] = sc.nextInt();
+    }
+    BubbleSort(n, l);
+    InsertionSort(n, l);
+    SelectionSort(n, l);
+    QuickSort(l, 0, n - 1);
+    System.out.println("Быстрая сортировка вывела:");
+    System.out.println(Arrays.toString(l));
+    MergeSort(l, 0, n);
+    System.out.println("Cортировка слиянием вывела:");
+    System.out.println(Arrays.toString(l));
+    }
+}
